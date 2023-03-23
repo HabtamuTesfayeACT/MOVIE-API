@@ -222,9 +222,9 @@ console.log('1');
          }
          else{
          movies.forEach((series,i) => {
-           /* if(!series.poster_path){
+            if(!series.poster_path){
               series.splice(i,1);
-            }*/
+            }
                Movie(series.poster_path, series.id,series.name);
          });
         }

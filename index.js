@@ -184,7 +184,7 @@ fetchSeries()
  
       function seriesMoveis(names,poster,id){
       const div = document.createElement("div");
-      div.classList.add("grids");
+      div.classList.add("grid-item");
     
       const img = document.createElement("img");
       img.src = `${imgBaseURL}${poster}`;

@@ -222,7 +222,11 @@
   padding: 14px;
   transition: transform 0.2s;
 }
-
+.grid-item:hover img {
+  transform: scale(
+    1.2
+  ); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
 .grids{
   width: 50%;
   display: grid;
@@ -251,11 +255,8 @@
   filter: drop-shadow(0px 10px 3px black);
   cursor: pointer;
   padding: 14px;
-  transition: transform 0.2s;
-  margin: 5px;
+  transition: transform 0.2s; /* Animation */
 }
-
-
 
 .listes{
   margin: 55px;
@@ -321,7 +322,7 @@
   padding-top: 100px;
 }
 .movie-description {
-  width: 50%;
+  width: 70%;
   margin: 16px;
   box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, 0.2);
   padding-left: 30px;
