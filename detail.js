@@ -26,44 +26,37 @@ const movieId = newLink.searchParams.get("movieId");
 const val = newLink.searchParams.get("val");
 const seriesId = newLink.searchParams.get("seriesId");
 //API key
-const apiKey = "1bfdbff05c2698dc917dd28c08d41096";
+const apiKey = "k_zgx7ylrn";
 //API to fetch image
 const imgBaseURL = "http://image.tmdb.org/t/p/w500";
 if(val == 1){
 //API link about the movies detail 
 const detailMovie =
-  "https://api.themoviedb.org/3/movie/" +
-  movieId +
-  "?api_key=" +
-  apiKey +
-  "&language=en-US";
-//API link for similar movies
-const relatedUrl =
-  "https://api.themoviedb.org/3/movie/" +
-  movieId +
-  "/similar?api_key=" +
-  apiKey +
-  "&language=en-US&page=1";
+ 'https://imdb-api.com/en/API/Title/'+ apiKey +'/'+ movieId ;
 
-  const credits =
-  "https://api.themoviedb.org/3/movie/" +
-  movieId +
-  "/credits?api_key=" +
-  apiKey +
-  "&language=en-US&page=1";
 // detail Movie API
 fetch(detailMovie)
-	.then(response => response.json())
 	.then(response => {
-  document.getElementById("myImageID").src = `${imgBaseURL}${response.poster_path}`;
-  document.getElementById("original_title").innerHTML = response.original_title;
-  document.getElementById("overview").innerHTML = response.overview;
-  document.getElementById("release_date").innerHTML = response.release_date;})
+    if (!response.ok) {
+      key = 1;
+      throw new Error('Failed to fetch movies');
+    }
+   return response.json()})
+	.then(response => {
+    console.log(response);
+  document.getElementById("myImageID").src = response.image;
+  console.log(response.fullTitle);
+  console.log(response.plotLocal);
+  console.log(response.releaseDate);
+  console.log(movieId);
+  document.getElementById("original_title").innerHTML = response.fullTitle;
+  document.getElementById("overview").innerHTML = response.plot;
+  document.getElementById("release_date").innerHTML = response.releaseDate;})
 	.catch(err => console.error(err));
-  
+
   function fetchcasts() {
 
-    return fetch(credits)
+    return fetch(detailMovie)
       .then(response => {
         if (!response.ok) {
           key = 1;
@@ -71,7 +64,7 @@ fetch(detailMovie)
         }
         return response.json();
       })
-      .then(data => data.cast)
+      .then(data => data.actorList)
       .catch(error => {
         console.error(error);
       });
@@ -79,7 +72,7 @@ fetch(detailMovie)
 fetchcasts()
 .then(casts => {
   casts.forEach(cast => {
-    castappend(cast.name,cast.profile_path);
+    castappend(cast.name,cast.image);
   })
 })
 function castappend(names,poster){
@@ -87,7 +80,7 @@ function castappend(names,poster){
   div.classList.add("grid-item");
 
   const img = document.createElement("img");
-  img.src = `${imgBaseURL}${poster}`;
+  img.src = poster;
   
   const title = document.createElement("p");
   title.textContent= `${names}`;
@@ -97,11 +90,11 @@ function castappend(names,poster){
   div.appendChild(title);
   grid.appendChild(div);
 }
-console.log('1');
+
   //Movie Related Movie API
   async function fetchRelatedMovies() {
 
-    return fetch(relatedUrl)
+    return fetch(detailMovie)
       .then(response => {
         if (!response.ok) {
           key = 1;
@@ -109,7 +102,7 @@ console.log('1');
         }
         return response.json();
       })
-      .then(data => data.results)
+      .then(data => data.similars)
       .catch(error => {
         console.error(error);
       });
@@ -117,23 +110,9 @@ console.log('1');
 
    fetchRelatedMovies()
     .then(movies => {
-      if(movies.length == 0){
-        const div = document.createElement('div');
-        div.classList.add('nofound')
-        const No_found = document.createElement('h1');
-        No_found.textContent = "No Related movies found";
-        No_found.classList.add('no')
-        div.appendChild(No_found);
-        document.getElementById("movies").appendChild(div);
-       }
-       else{
       movies.forEach((movie,i) => {
-        if(!movie.poster_path){
-          movie.splice(i,1);
-        }
-            Movie(movie.poster_path, movie.id,movie.title);
+            Movie(movie.image, movie.id,movie.title);
       });
-    }
     })
     .catch(error => {
       console.error(error);
@@ -144,7 +123,7 @@ console.log('1');
       div.classList.add("grid-item");
     
       const img = document.createElement("img");
-      img.src = `${imgBaseURL}${poster_path}`;
+      img.src = poster_path;
       
       const title = document.createElement("p");
       title.textContent= `${MovieTitile}`;
@@ -166,12 +145,7 @@ console.log('1');
     if(val == 0){     
    //API key
    //API link about the movies detail 
-   const detailseries =
-     "https://api.themoviedb.org/3/tv/" +
-     seriesId +
-     "?api_key=" +
-     apiKey +
-     "&language=en-US";
+   const detailseries = 'https://imdb-api.com/en/API/Title/'+apiKey+'/'+seriesId;
    //API link for similar movies
    const relatedSeriesUrl =
      "https://api.themoviedb.org/3/tv/" +
@@ -184,18 +158,18 @@ console.log('1');
    fetch(detailseries)
      .then(response => response.json())
      .then(response => {
-     document.getElementById("myImageID").src = `${imgBaseURL}${response.poster_path}`;
-     document.getElementById("original_title").innerHTML = response.original_name;
-     document.getElementById("overview").innerHTML = response.overview;
-     document.getElementById("release_date").innerHTML = response.first_air_date;
-     document.getElementById("last").innerHTML = response.number_of_episodes;
-     document.getElementById("sesons").innerHTML = response.number_of_seasons; })
+     document.getElementById("myImageID").src = response.image;
+     document.getElementById("original_title").innerHTML = response.fullTitle;
+     document.getElementById("overview").innerHTML = response.plot;
+     document.getElementById("release_date").innerHTML = response.releaseDate;
+     document.getElementById("last").innerHTML = response.type;
+     document.getElementById("sesons").innerHTML = response.stars; })
      .catch(err => console.error(err));
    
      //Movie series Movie API
      function fetchRelatedseries() {
    
-       return fetch(relatedSeriesUrl)
+       return fetch(detailseries)
          .then(response => {
            if (!response.ok) {
              throw new Error('Failed to fetch movies');
@@ -203,7 +177,7 @@ console.log('1');
    
            return response.json();
          })
-         .then(data => data.results)
+         .then(data => data.similars)
          .catch(error => {
            console.error(error);
          });
@@ -211,23 +185,9 @@ console.log('1');
    
      fetchRelatedseries()
        .then(movies => {
-        if(movies.length == 0){
-          const div = document.createElement('div');
-          div.classList.add('nofound')
-          const No_found = document.createElement('h1');
-          No_found.textContent = "No Related Series found";
-          No_found.classList.add('no')
-          div.appendChild(No_found);
-          document.getElementById("movies").appendChild(div);
-         }
-         else{
          movies.forEach((series,i) => {
-            if(!series.poster_path){
-              series.splice(i,1);
-            }
-               Movie(series.poster_path, series.id,series.name);
-         });
-        }
+               Movie(series.image, series.id,series.title);
+         })
        })
        .catch(error => {
          console.error(error);
@@ -238,10 +198,10 @@ console.log('1');
          div.classList.add("grid-item");
        
          const img = document.createElement("img");
-         img.src = `${imgBaseURL}${poster_path}`;
+         img.src = poster_path;
          
          const title = document.createElement("p");
-         title.textContent= `${seriesTitile}`;
+         title.textContent= seriesTitile;
    
          const grid = document.querySelector(".grid");
          div.appendChild(img);

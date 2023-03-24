@@ -20,9 +20,8 @@ window.addEventListener('DOMContentLoaded',function(){
     document.addEventListener('scroll', navbarShrink);
 });
 
-const apiKey = "1bfdbff05c2698dc917dd28c08d41096";
-const baseURL = "https://api.themoviedb.org/3/movie/upcoming?api_key=";
-const searchUrl = "https://api.themoviedb.org/3/search/movie?api_key=1bfdbff05c2698dc917dd28c08d41096&query=";
+const apiKey = "k_zgx7ylrn";
+const baseURL = "https://imdb-api.com/API/MostPopularMovies/";
 const imgBaseURL = "http://image.tmdb.org/t/p/w500";
 var remove_Tv_Shows = 0;
 async function fetchMovies() {
@@ -36,7 +35,7 @@ async function fetchMovies() {
 
         return response.json();
       })
-      .then(data => data.results)
+      .then(data => data.items)
       .catch(error => {
         console.error(error);
       });
@@ -46,8 +45,7 @@ async function fetchMovies() {
     .then(movies => {
    
       movies.forEach(movie => {
-            Movie(movie.poster_path, movie.id,movie.title);
-            console.log(movie.poster_path)
+            Movie(movie.image, movie.id,movie.title);
       });
     })
     .catch(error => {
@@ -59,7 +57,7 @@ async function fetchMovies() {
         div.classList.add("grid-item");
       
         const img = document.createElement("img");
-        img.src = `${imgBaseURL}${poster_path}`;
+        img.src = poster_path;
         
         const title = document.createElement("p");
         title.textContent= `${MovieTitile}`;
@@ -78,7 +76,7 @@ async function fetchMovies() {
       }
 
 // ====================================== search ==================================================
-
+const searchUrl = "https://imdb-api.com/API/SearchMovie/k_feb1mn1o/";
 function searhMovies() {
     document.getElementById("movies").innerHTML = "";
     document.getElementById("tv-series-list").innerHTML = "";
@@ -113,10 +111,7 @@ function searhMovies() {
          }
          else{
         movies.forEach((movie,i) => {
-          if(!movie.poster_path){
-            movie.splice(i,1);
-          }
-              MovieResult(movie.poster_path, movie.id,movie.title);
+              MovieResult(movie.image, movie.id,movie.title);
         });
       }
       })
@@ -129,7 +124,7 @@ function searhMovies() {
     div.classList.add("grid-item");
   
     const img = document.createElement("img");
-    img.src = `${imgBaseURL}${poster_path}`;
+    img.src = poster_path;
     
     const title = document.createElement("p");
     title.textContent= `${MovieTitile}`;
@@ -149,7 +144,7 @@ function searhMovies() {
 
   // ============================== series showes ==============================================
 
-  const SeriesbaseURL = 'https://api.themoviedb.org/3/tv/popular?api_key=';
+  const SeriesbaseURL = 'https://imdb-api.com/API/MostPopularTVs/';
 
    function fetchSeries() {
   const apiUrl = `${SeriesbaseURL}${apiKey}`;
@@ -162,7 +157,7 @@ function searhMovies() {
 
       return response.json();
     })
-    .then(data => data.results)
+    .then(data => data.items)
     .catch(error => {
       console.error(error);
     });
@@ -172,10 +167,7 @@ function searhMovies() {
 fetchSeries()
       .then(tvShows => {
         tvShows.forEach((tvShow,i) => {
-          if(!tvShow.poster_path){
-            tvShow.splice(i,1);
-          }
-          seriesMoveis(tvShow.name,tvShow.poster_path,tvShow.id);
+          seriesMoveis(tvShow.title,tvShow.image,tvShow.id);
         });
       })
       .catch(error => {
@@ -187,7 +179,7 @@ fetchSeries()
       div.classList.add("grid-item");
     
       const img = document.createElement("img");
-      img.src = `${imgBaseURL}${poster}`;
+      img.src = poster;
       
       const title = document.createElement("p");
       title.textContent= `${names}`;
