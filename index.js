@@ -76,7 +76,7 @@ async function fetchMovies() {
       }
 
 // ====================================== search ==================================================
-const searchUrl = "https://imdb-api.com/API/SearchMovie/k_feb1mn1o/";
+const searchUrl = "https://imdb-api.com/API/SearchMovie/k_zgx7ylrn/";
 function searhMovies() {
     document.getElementById("movies").innerHTML = "";
     document.getElementById("tv-series-list").innerHTML = "";
